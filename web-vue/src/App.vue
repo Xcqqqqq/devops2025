@@ -11,9 +11,8 @@
 <script>
 import { defineComponent, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from './stores/userStore'
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
+import { useUserStore } from './stores/user'
+// ElementPlus已经在main.js中注册
 
 export default defineComponent({
   name: 'App',

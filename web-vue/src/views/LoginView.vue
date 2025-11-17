@@ -36,7 +36,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '../stores/userStore'
+import { useUserStore } from '../stores/user'
 import { ElMessage } from 'element-plus'
 
 const router = useRouter()
@@ -68,14 +68,16 @@ const handleLogin = async () => {
   errorMsg.value = ''
 
   try {
-    const result = await userStore.login(loginForm.value.username, loginForm.value.password)
-    if (result.success) {
-      ElMessage.success('登录成功')
+    // userLogin方法直接返回布尔值，不是带success属性的对象
+    const success = await userStore.userLogin(loginForm.value.username, loginForm.value.password)
+    if (success) {
+      // 注意：userLogin方法内部已经处理了成功提示
       router.push('/home')
     } else {
-      errorMsg.value = result.message
+      errorMsg.value = '登录失败，请检查用户名和密码'
     }
   } catch (error) {
+    console.error('登录错误:', error)
     errorMsg.value = '登录失败，请稍后重试'
   } finally {
     loading.value = false

@@ -47,7 +47,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '../stores/userStore'
+import { useUserStore } from '../stores/user'
 import { ElMessage } from 'element-plus'
 
 const router = useRouter()
@@ -99,19 +99,21 @@ const handleRegister = async () => {
   errorMsg.value = ''
 
   try {
-    const result = await userStore.register(
+    // userRegister方法直接返回布尔值，不是带success属性的对象
+    const success = await userStore.userRegister(
       registerForm.value.username,
       registerForm.value.password,
       registerForm.value.nickname
     )
-    if (result.success) {
-      ElMessage.success('注册成功')
+    if (success) {
       // 注册成功后跳转到登录页
+      // 注意：userRegister方法内部已经处理了成功提示
       router.push('/login')
     } else {
-      errorMsg.value = result.message
+      errorMsg.value = '注册失败，请稍后重试'
     }
   } catch (error) {
+    console.error('注册错误:', error)
     errorMsg.value = '注册失败，请稍后重试'
   } finally {
     loading.value = false

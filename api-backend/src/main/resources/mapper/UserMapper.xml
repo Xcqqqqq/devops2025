@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aihealthassistant.mapper.UserMapper">
+
+    <select id="selectByUsername" resultType="com.example.aihealthassistant.entity.User">
+        SELECT * FROM users WHERE username = #{username}
+    </select>
+
+    <select id="selectById" resultType="com.example.aihealthassistant.entity.User">
+        SELECT * FROM users WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.example.aihealthassistant.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO users (username, password, nickname, email, phone, avatar, status, created_at, updated_at)
+        VALUES (#{username}, #{password}, #{nickname}, #{email}, #{phone}, #{avatar}, #{status}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <update id="updateLastLoginTime">
+        UPDATE users SET last_login_time = NOW() WHERE id = #{id}
+    </update>
+
+</mapper>

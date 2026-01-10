@@ -122,17 +122,12 @@ public class ChatMessageServiceImpl implements ChatMessageService {
      * @return AI回复内容
      */
     private String callModelAPI(String userMessage, String agentPrompt) {
-        logger.info("Calling Model API with userMessage: {}, agentPrompt: {}", userMessage, agentPrompt);
         try {
             // 创建DeepSeekApiClient实例
             DeepSeekApiClient client = new DeepSeekApiClient();
-            
-            logger.info("Sending request...\n");
 
             // 调用DeepSeek API获取AI回复，传递系统提示词
             String aiResponse = client.chatWithSystemPrompt(agentPrompt, userMessage, "deepseek-chat");
-            
-            logger.info("Sent request successfully.\n");
 
             return aiResponse;
         } catch (IOException e) {

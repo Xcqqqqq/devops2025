@@ -187,7 +187,6 @@ const handleBackToHome = () => {
 const handleNewSession = () => {
   newSessionName.value = '新会话'
   newSessionDialogVisible.value = true
-}
 
 // 确认创建会话
 const confirmCreateSession = async () => {

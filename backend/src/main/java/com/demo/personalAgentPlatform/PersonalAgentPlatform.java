@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.demo.aihealthagent.module.*.mapper")
+@MapperScan("com.demo.personalAgentPlatform.module.*.mapper")
 public class PersonalAgentPlatform {
     
     public static void main(String[] args) {

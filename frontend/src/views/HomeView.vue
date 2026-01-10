@@ -83,8 +83,8 @@
         </el-form-item>
         <el-form-item v-if="userInfo?.permission === 1" label="是否公开">
           <el-select v-model="addAgentForm.isPublic" placeholder="请选择">
-            <el-option label="是" :value="true" />
-            <el-option label="否" :value="false" />
+            <el-option label="是" :value="1" />
+            <el-option label="否" :value="0" />
           </el-select>
         </el-form-item>
       </el-form>
@@ -174,7 +174,7 @@ const addAgentForm = ref({
   name: '',
   description: '',
   prompt: '',
-  isPublic: false
+  isPublic: 0
 })
 
 const editAgentForm = ref({
@@ -204,12 +204,12 @@ const getAgentListData = async () => {
   try {
     // console.log('getAgentListData called, userInfo:', userInfo.value)
     if (!userInfo.value?.id) {
-      console.log('userInfo.id is null, cannot get agent list')
+      // console.log('userInfo.id is null, cannot get agent list')
       return
     }
-    console.log('Calling getAgentList')
+    // console.log('Calling getAgentList')
     const data = await getAgentList()
-    console.log('Agent list received:', data)
+    // console.log('Agent list received:', data)
     agentList.value = data
   } catch (error) {
     console.error('获取智能体列表失败:', error)
@@ -235,7 +235,7 @@ const resetAddForm = () => {
     name: '',
     description: '',
     prompt: '',
-    isPublic: false
+    isPublic: 0
   }
 }
 

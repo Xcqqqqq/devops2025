@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.demo.aihealthagent.module.agent.mapper.AgentMapper">
-    <resultMap id="AgentMap" type="com.demo.aihealthagent.module.agent.entity.Agent">
+<mapper namespace="com.demo.personalAgentPlatform.module.agent.mapper.AgentMapper">
+    <resultMap id="AgentMap" type="com.demo.personalAgentPlatform.module.agent.entity.Agent">
         <id column="id" property="id" />
         <result column="userId" property="userId" />
         <result column="name" property="name" />

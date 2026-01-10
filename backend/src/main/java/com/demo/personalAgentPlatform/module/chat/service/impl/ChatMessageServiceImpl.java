@@ -4,12 +4,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.MediaType;
+import java.io.IOException;
 
 import com.demo.personalAgentPlatform.module.chat.dto.SendMessageDTO;
 import com.demo.personalAgentPlatform.module.chat.entity.ChatMessage;
@@ -23,22 +18,22 @@ import com.demo.personalAgentPlatform.module.agent.entity.Agent;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class ChatMessageServiceImpl implements ChatMessageService {
+    // 日志对象
+    private static final Logger logger = LoggerFactory.getLogger(ChatMessageServiceImpl.class);
 
     @Autowired
     private ChatMessageMapper chatMessageMapper;
 
     @Autowired
     private ChatSessionMapper chatSessionMapper;
-
-    @Autowired
-    private RestTemplate restTemplate;
     
     @Autowired
     private AgentService agentService;
@@ -63,7 +58,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         // 3. 获取会话对应的agent信息
         ChatSession chatSession = chatSessionMapper.selectById(dto.getSessionId());
         Agent agent = agentService.getAgentById(chatSession.getAgentId());
-        
+    
         // 4. 调用模型API获取AI回复，传递agent的prompt
         String aiResponse = callModelAPI(dto.getContent(), agent.getPrompt());
 
@@ -127,65 +122,22 @@ public class ChatMessageServiceImpl implements ChatMessageService {
      * @return AI回复内容
      */
     private String callModelAPI(String userMessage, String agentPrompt) {
+        logger.info("Calling Model API with userMessage: {}, agentPrompt: {}", userMessage, agentPrompt);
         try {
-            // 模型API地址（示例地址，实际使用时需要替换）
-            String apiUrl = "https://api.deepseek.com";
+            // 创建DeepSeekApiClient实例
+            DeepSeekApiClient client = new DeepSeekApiClient();
             
-            // API密钥
-            String apiKey = "sk-4fb65d47751743799deb8bca1b0f0eba";
+            logger.info("Sending request...\n");
+
+            // 调用DeepSeek API获取AI回复，传递系统提示词
+            String aiResponse = client.chatWithSystemPrompt(agentPrompt, userMessage, "deepseek-chat");
             
-            // 设置请求头
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.setBearerAuth(apiKey);
-            
-            // 设置请求体
-            Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put("model", "deepseek-v3.2");
-            
-            List<Map<String, String>> messages = new ArrayList<>();
-            Map<String, String> systemMessage = new HashMap<>();
-            systemMessage.put("role", "system");
-            systemMessage.put("content", agentPrompt);
-            messages.add(systemMessage);
-            
-            Map<String, String> userContent = new HashMap<>();
-            userContent.put("role", "user");
-            userContent.put("content", userMessage);
-            messages.add(userContent);
-            
-            requestBody.put("messages", messages);
-            requestBody.put("temperature", 0.7);
-            requestBody.put("max_tokens", 500);
-            
-            // 创建请求实体
-            HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
-            
-            // 发送请求
-            ResponseEntity<Map> response = restTemplate.exchange(
-                apiUrl,
-                HttpMethod.POST,
-                requestEntity,
-                Map.class
-            );
-            
-            // 解析响应
-            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-                Map<String, Object> responseBody = response.getBody();
-                List<Map<String, Object>> choices = (List<Map<String, Object>>) responseBody.get("choices");
-                if (choices != null && !choices.isEmpty()) {
-                    Map<String, Object> choice = choices.get(0);
-                    Map<String, Object> message = (Map<String, Object>) choice.get("message");
-                    if (message != null) {
-                        return (String) message.get("content");
-                    }
-                }
-            }
-            
-            // 如果API调用失败，返回默认回复
-            return generateAIResponse(userMessage);
-        } catch (Exception e) {
+            logger.info("Sent request successfully.\n");
+
+            return aiResponse;
+        } catch (IOException e) {
             // 异常处理，返回默认回复
+            logger.error("Model API call failed: {}", e.getMessage());
             e.printStackTrace();
             return generateAIResponse(userMessage);
         }

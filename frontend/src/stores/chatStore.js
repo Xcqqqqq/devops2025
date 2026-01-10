@@ -104,10 +104,10 @@ export const useChatStore = defineStore('chat', {
         this.isLoading = true
         const messages = await chatApi.getSessionMessages(sessionId, { page, size })
         if (page === 1) {
-          this.messageList = messages.reverse() // 最新消息在下面
+          this.messageList = messages // 最新消息在下面
         } else {
           // 分页加载时，将新消息插入到前面
-          this.messageList = [...messages.reverse(), ...this.messageList]
+          this.messageList = [...messages, ...this.messageList]
         }
         this.currentPage = page
         return this.messageList
@@ -154,9 +154,9 @@ export const useChatStore = defineStore('chat', {
           content
         })
         
-        // 更新消息列表，移除临时消息，添加真实AI回复
+        // 更新消息列表，只移除AI输入提示，保留用户消息，添加真实AI回复
         this.messageList = this.messageList.filter(msg => 
-          msg.id !== userMessage.id && msg.id !== aiTypingMessage.id
+          msg.id !== aiTypingMessage.id
         )
         this.messageList.push({
           id: response.id,

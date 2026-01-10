@@ -1,5 +1,7 @@
 package com.demo.personalAgentPlatform.module.chat.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/chat")
 public class ChatController {
+    // 日志对象
+    private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
 
     @Autowired
     private ChatSessionService chatSessionService;
@@ -38,6 +42,7 @@ public class ChatController {
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "20") Integer size) {
         Long userId = UserUtils.getCurrentUserId();
+        // logger.info("calling getSessionListByUserId with userId: {}, page: {}, size: {}\n", userId, page, size);
         List<ChatSessionVO> sessions = chatSessionService.getSessionListByUserId(userId, page, size);
         return ApiResponse.ok(sessions);
     }

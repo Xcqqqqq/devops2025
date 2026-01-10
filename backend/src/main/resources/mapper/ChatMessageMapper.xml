@@ -6,7 +6,7 @@
 
     <resultMap id="BaseResultMap" type="com.demo.personalAgentPlatform.module.chat.entity.ChatMessage">
         <id column="id" property="id"/>
-        <result column="session_id" property="sessionId"/>
+        <result column="sessionId" property="sessionId"/>
         <result column="role" property="role"/>
         <result column="content" property="content"/>
         <result column="model" property="model"/>
@@ -15,7 +15,7 @@
 
     <insert id="insert" parameterType="com.demo.personalAgentPlatform.module.chat.entity.ChatMessage" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO chat_message (
-            session_id,
+            sessionId,
             role,
             content,
             model,
@@ -35,17 +35,17 @@
 
     <select id="selectBySessionId" resultMap="BaseResultMap">
         SELECT * FROM chat_message 
-        WHERE session_id = #{sessionId}
+        WHERE sessionId = #{sessionId}
         ORDER BY time ASC
         LIMIT #{offset}, #{limit};
     </select>
 
     <select id="countBySessionId" resultType="int">
         SELECT COUNT(*) FROM chat_message 
-        WHERE session_id = #{sessionId};
+        WHERE sessionId = #{sessionId};
     </select>
 
     <delete id="deleteBySessionId">
-        DELETE FROM chat_message WHERE session_id = #{sessionId};
+        DELETE FROM chat_message WHERE sessionId = #{sessionId};
     </delete>
 </mapper>

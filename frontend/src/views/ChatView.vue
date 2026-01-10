@@ -3,6 +3,9 @@
     <!-- 左侧会话列表 -->
     <div class="session-list">
       <div class="session-header">
+        <el-button type="default" size="small" @click="handleBackToHome">
+          <el-icon><ArrowLeft /></el-icon> 返回主页
+        </el-button>
         <h2>{{ agentInfo?.name || 'AI助手' }}</h2>
         <el-button type="primary" size="small" @click="handleNewSession">
           <el-icon><Plus /></el-icon> 新建会话
@@ -139,7 +142,7 @@
 
 <script setup>
 import { ref, onMounted, nextTick, watch } from 'vue'
-import { Plus, Delete, Edit } from '@element-plus/icons-vue'
+import { Plus, Delete, Edit, ArrowLeft } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useChatStore } from '../stores/chatStore'
 import { useUserStore } from '../stores/userStore'
@@ -173,6 +176,11 @@ const scrollToBottom = () => {
   if (messageListRef.value) {
     messageListRef.value.scrollTop = messageListRef.value.scrollHeight
   }
+}
+
+// 返回主页
+const handleBackToHome = () => {
+  router.push('/home')
 }
 
 // 创建新会话（显示对话框）
@@ -328,9 +336,12 @@ onMounted(async () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
 }
 
 .session-header h2 {
+  flex: 1;
+  text-align: center;
   margin: 0;
   font-size: 18px;
   color: #303133;

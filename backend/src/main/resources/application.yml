@@ -36,7 +36,7 @@ server:
 logging:
   level:
     root: info
-    com.demo.personalAgentPlatform: debug
-  pattern:
-    console: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n'
-    file: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n'
+    com.demo.personalAgentPlatform.module.chat.service: debug
+    com.demo.personalAgentPlatform.module.chat.controller: debug
+  file:
+    name: backend.log

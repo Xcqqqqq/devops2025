@@ -89,6 +89,21 @@
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
+        
+        <!-- Gson JSON解析库（核心依赖） -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version> <!-- 最新稳定版，也可使用2.9.1、2.8.9等 -->
+            <scope>compile</scope> <!-- 编译期生效，默认可不写 -->
+        </dependency>
+
+        <!-- OkHttp3 核心依赖（必须） -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.12.0</version> <!-- 最新稳定版，兼容Java 8+ -->
+        </dependency>
     </dependencies>
     
     <build>
@@ -96,7 +111,7 @@
             <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.11.0</version> <!-- 与Java 17兼容的版本 -->
+            <version>3.12.0</version> <!-- 与Java 17兼容的版本 -->
             <configuration>
                 <source>17</source> <!-- 你的Java版本 -->
                 <target>17</target> <!-- 你的Java版本 -->

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.aihealthagent.module.user.mapper.UserMapper">
+    <resultMap id="UserMap" type="com.demo.aihealthagent.module.user.entity.User">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="nickname" property="nickname" />
+        <result column="email" property="email" />
+        <result column="phone" property="phone" />
+        <result column="avatar" property="avatar" />
+        <result column="gender" property="gender" />
+        <result column="birthday" property="birthday" />
+        <result column="status" property="status" />
+        <result column="last_login_time" property="lastLoginTime" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+        <result column="is_deleted" property="isDeleted" />
+    </resultMap>
+
+    <select id="selectByUsername" resultMap="UserMap">
+        SELECT * FROM users WHERE username = #{username}
+    </select>
+
+    <select id="selectById" resultMap="UserMap">
+        SELECT * FROM users WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO users (
+            username, password, nickname, avatar, permission
+        ) VALUES (
+            #{username}, #{password}, #{nickname}, #{avatar}, #{permission}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE users SET
+            nickname = #{nickname},
+            avatar = #{avatar},
+        WHERE id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.aihealthagent.module.agent.mapper.AgentMapper">
+    <resultMap id="AgentMap" type="com.demo.aihealthagent.module.agent.entity.Agent">
+        <id column="id" property="id" />
+        <result column="userId" property="userId" />
+        <result column="name" property="name" />
+        <result column="description" property="description" />
+        <result column="prompt" property="prompt" />
+        <result column="isPublic" property="isPublic" />
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO agent (
+            userId, name, description, prompt, isPublic
+        ) VALUES (
+            #{userId}, #{name}, #{description}, #{prompt}, #{isPublic}
+        )
+    </insert>
+
+    <select id="selectById" resultMap="AgentMap">
+        SELECT * FROM agent WHERE id = #{id}
+    </select>
+
+    <select id="selectByUserId" resultMap="AgentMap">
+        SELECT *, 0 AS order_col FROM agent WHERE userId = #{userId}
+        UNION ALL
+        SELECT *, 1 AS order_col FROM agent WHERE isPublic = 1 AND userId != #{userId}
+        ORDER BY order_col ASC, id DESC
+    </select>
+
+    <update id="update">
+        UPDATE agent SET
+            description = #{description},
+            prompt = #{prompt}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM agent WHERE id = #{id}
+    </delete>
+</mapper>

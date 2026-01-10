@@ -1,0 +1,14 @@
+package com.demo.personalAgentPlatform;
+
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+@MapperScan("com.demo.aihealthagent.module.*.mapper")
+public class PersonalAgentPlatform {
+    
+    public static void main(String[] args) {
+        SpringApplication.run(PersonalAgentPlatform.class, args);
+    }
+}

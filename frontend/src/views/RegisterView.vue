@@ -1,7 +1,7 @@
 <template>
   <div class="register-container">
     <div class="register-form">
-      <h2>AI健康助手 - 注册</h2>
+      <h2>个人智能体平台 - 注册</h2>
       <el-form
         ref="registerFormRef"
         :model="registerForm"
@@ -100,14 +100,14 @@ const handleRegister = async () => {
 
   try {
     // userRegister方法直接返回布尔值，不是带success属性的对象
-    const success = await userStore.userRegister(
+    const success = await userStore.register(
       registerForm.value.username,
       registerForm.value.password,
       registerForm.value.nickname
     )
     if (success) {
       // 注册成功后跳转到登录页
-      // 注意：userRegister方法内部已经处理了成功提示
+      // 注意：register方法内部已经处理了成功提示
       router.push('/login')
     } else {
       errorMsg.value = '注册失败，请稍后重试'

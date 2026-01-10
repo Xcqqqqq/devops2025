@@ -10,7 +10,7 @@
         <result column="role" property="role"/>
         <result column="content" property="content"/>
         <result column="model" property="model"/>
-        <result column="created_at" property="createdAt"/>
+        <result column="time" property="time"/>
     </resultMap>
 
     <insert id="insert" parameterType="com.demo.personalAgentPlatform.module.chat.entity.ChatMessage" useGeneratedKeys="true" keyProperty="id">
@@ -19,13 +19,13 @@
             role,
             content,
             model,
-            created_at
+            time
         ) VALUES (
             #{sessionId},
             #{role},
             #{content},
             #{model},
-            #{createdAt}
+            #{time}
         );
     </insert>
 
@@ -36,7 +36,7 @@
     <select id="selectBySessionId" resultMap="BaseResultMap">
         SELECT * FROM chat_message 
         WHERE session_id = #{sessionId}
-        ORDER BY created_at ASC
+        ORDER BY time ASC
         LIMIT #{offset}, #{limit};
     </select>
 

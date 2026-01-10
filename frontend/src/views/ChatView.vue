@@ -3,7 +3,7 @@
     <!-- 左侧会话列表 -->
     <div class="session-list">
       <div class="session-header">
-        <h2>AI健康助手</h2>
+        <h2>{{ agentInfo?.name || 'AI助手' }}</h2>
         <el-button type="primary" size="small" @click="handleNewSession">
           <el-icon><Plus /></el-icon> 新建会话
         </el-button>
@@ -114,6 +114,26 @@
         </span>
       </template>
     </el-dialog>
+
+    <!-- 新建会话对话框 -->
+    <el-dialog
+      v-model="newSessionDialogVisible"
+      title="新建会话"
+      width="400px"
+    >
+      <el-input
+        v-model="newSessionName"
+        placeholder="请输入会话名称"
+        maxlength="50"
+        show-word-limit
+      />
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="newSessionDialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="confirmCreateSession">确定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -123,15 +143,21 @@ import { Plus, Delete, Edit } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useChatStore } from '../stores/chatStore'
 import { useUserStore } from '../stores/userStore'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import { getAgentById } from '../api/agent'
 
 const chatStore = useChatStore()
 const userStore = useUserStore()
 const router = useRouter()
+const route = useRoute()
 const inputContent = ref('')
 const messageListRef = ref(null)
 const renameDialogVisible = ref(false)
 const newSessionTitle = ref('')
+const agentInfo = ref(null)
+// 新建会话对话框相关
+const newSessionDialogVisible = ref(false)
+const newSessionName = ref('')
 
 // 监听消息列表变化，自动滚动到底部
 watch(
@@ -149,10 +175,23 @@ const scrollToBottom = () => {
   }
 }
 
-// 创建新会话
-const handleNewSession = async () => {
+// 创建新会话（显示对话框）
+const handleNewSession = () => {
+  newSessionName.value = '新会话'
+  newSessionDialogVisible.value = true
+}
+
+// 确认创建会话
+const confirmCreateSession = async () => {
+  if (!newSessionName.value.trim()) {
+    ElMessage.warning('请输入会话名称')
+    return
+  }
+  
   try {
-    await chatStore.createNewSession()
+    const agentId = route.params.agentId
+    await chatStore.createNewSession(newSessionName.value.trim(), agentId)
+    newSessionDialogVisible.value = false
   } catch (error) {
     console.error('创建会话失败:', error)
   }
@@ -235,6 +274,19 @@ const confirmRenameSession = async () => {
   }
 }
 
+// 获取当前agent信息
+const getAgentInfo = async () => {
+  try {
+    const agentId = route.params.agentId
+    if (agentId) {
+      const agent = await getAgentById(agentId)
+      agentInfo.value = agent
+    }
+  } catch (error) {
+    console.error('获取智能体信息失败:', error)
+  }
+}
+
 // 组件挂载时初始化
 onMounted(async () => {
   // 检查用户是否登录
@@ -244,8 +296,10 @@ onMounted(async () => {
   }
 
   try {
+    // 获取当前agent信息
+    await getAgentInfo()
     // 加载会话列表
-    await chatStore.loadSessionList()
+    await chatStore.loadSessionList(route.params.agentId)
   } catch (error) {
     console.error('初始化聊天失败:', error)
   }

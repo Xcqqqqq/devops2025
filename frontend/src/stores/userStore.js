@@ -70,7 +70,7 @@ export const useUserStore = defineStore('user', {
     },
 
     // 用户注册
-    async register(username, password, nickname = '', email = '', phone = '') {
+    async register(username, password, nickname = '') {
       try {
         const response = await http.post('/user/register', {
           username,

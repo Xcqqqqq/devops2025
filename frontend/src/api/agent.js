@@ -19,3 +19,8 @@ export const updateAgent = (id, data) => {
 export const deleteAgent = (id) => {
   return http.delete(`/agent/delete/${id}`)
 }
+
+// 根据ID获取智能体
+export const getAgentById = (id) => {
+  return http.get(`/agent/get/${id}`)
+}

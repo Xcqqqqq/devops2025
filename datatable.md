@@ -6,7 +6,7 @@ properties:
   - password
   - nickname
   - avatar
-  - permission
+  - permission（int, 0 or 1）
 
 ## agent table
 primary key: id
@@ -16,4 +16,4 @@ properties:
   - name
   - description
   - prompt
-  - public (boolean)
+  - public (int, 0 or 1)

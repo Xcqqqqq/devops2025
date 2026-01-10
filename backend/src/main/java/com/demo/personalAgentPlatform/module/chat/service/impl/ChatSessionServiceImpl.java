@@ -24,14 +24,11 @@ public class ChatSessionServiceImpl implements ChatSessionService {
     public ChatSessionVO createSession(CreateSessionDTO dto, Long userId) {
         ChatSession chatSession = new ChatSession();
         chatSession.setUserId(userId);
+        chatSession.setAgentId(dto.getAgentId());
         chatSession.setTitle(dto.getTitle() != null ? dto.getTitle() : "新会话");
-        chatSession.setType(dto.getType() != null ? dto.getType() : "chat");
-        chatSession.setStatus(1); // 1 进行中
         chatSession.setMessageCount(0);
         chatSession.setCreatedAt(LocalDateTime.now());
         chatSession.setUpdatedAt(LocalDateTime.now());
-        chatSession.setIsDeleted(0);
-        chatSession.setLastMessageTime(LocalDateTime.now());
 
         chatSessionMapper.insert(chatSession);
         return convertToVO(chatSession);
@@ -64,6 +61,7 @@ public class ChatSessionServiceImpl implements ChatSessionService {
         if (!validateSessionOwnership(id, userId)) {
             return false;
         }
+        // 直接删除会话（根据数据库表结构，使用物理删除）
         return chatSessionMapper.deleteById(id) > 0;
     }
 

@@ -7,83 +7,66 @@
     <resultMap id="BaseResultMap" type="com.demo.personalAgentPlatform.module.chat.entity.ChatSession">
         <id column="id" property="id"/>
         <result column="user_id" property="userId"/>
+        <result column="agent_id" property="agentId"/>
         <result column="title" property="title"/>
-        <result column="type" property="type"/>
-        <result column="status" property="status"/>
         <result column="message_count" property="messageCount"/>
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
-        <result column="is_deleted" property="isDeleted"/>
-        <result column="last_message_time" property="lastMessageTime"/>
     </resultMap>
 
     <insert id="insert" parameterType="com.demo.personalAgentPlatform.module.chat.entity.ChatSession" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO chat_session (
             user_id,
+            agent_id,
             title,
-            type,
-            status,
             message_count,
             created_at,
-            updated_at,
-            is_deleted,
-            last_message_time
+            updated_at
         ) VALUES (
             #{userId},
+            #{agentId},
             #{title},
-            #{type},
-            #{status},
             #{messageCount},
             #{createdAt},
-            #{updatedAt},
-            #{isDeleted},
-            #{lastMessageTime}
+            #{updatedAt}
         );
     </insert>
 
     <select id="selectById" resultMap="BaseResultMap">
-        SELECT * FROM chat_session WHERE id = #{id} AND is_deleted = 0;
+        SELECT * FROM chat_session WHERE id = #{id};
     </select>
 
     <select id="selectByUserId" resultMap="BaseResultMap">
         SELECT * FROM chat_session 
-        WHERE user_id = #{userId} AND is_deleted = 0
-        ORDER BY last_message_time DESC, created_at DESC
+        WHERE user_id = #{userId}
+        ORDER BY updated_at DESC
         LIMIT #{offset}, #{limit};
     </select>
 
     <select id="countByUserId" resultType="int">
         SELECT COUNT(*) FROM chat_session 
-        WHERE user_id = #{userId} AND is_deleted = 0;
+        WHERE user_id = #{userId};
     </select>
 
     <update id="update" parameterType="com.demo.personalAgentPlatform.module.chat.entity.ChatSession">
         UPDATE chat_session SET
             title = #{title},
-            type = #{type},
-            status = #{status},
             message_count = #{messageCount},
-            updated_at = #{updatedAt},
-            last_message_time = #{lastMessageTime}
-        WHERE id = #{id} AND is_deleted = 0;
-    </update>
-
-    <update id="deleteById">
-        UPDATE chat_session SET is_deleted = 1 WHERE id = #{id};
+            updated_at = #{updatedAt}
+        WHERE id = #{id};
     </update>
 
     <update id="updateMessageCount">
         UPDATE chat_session SET message_count = #{messageCount}, updated_at = NOW() 
-        WHERE id = #{id} AND is_deleted = 0;
+        WHERE id = #{id};
     </update>
 
-    <update id="updateLastMessageTime">
-        UPDATE chat_session SET last_message_time = #{lastMessageTime}, updated_at = NOW() 
-        WHERE id = #{id} AND is_deleted = 0;
-    </update>
+    <delete id="deleteById">
+        DELETE FROM chat_session WHERE id = #{id};
+    </delete>
 
     <select id="countByIdAndUserId" resultType="int">
         SELECT COUNT(*) FROM chat_session 
-        WHERE id = #{id} AND user_id = #{userId} AND is_deleted = 0;
+        WHERE id = #{id} AND user_id = #{userId};
     </select>
 </mapper>

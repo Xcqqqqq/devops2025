@@ -8,13 +8,11 @@ import lombok.Data;
 public class ChatSessionVO {
     private Long id;
     private Long userId;
+    private Long agentId;
     private String title;
-    private String type;
-    private Integer status;
     private Integer messageCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private LocalDateTime lastMessageTime;
 
 
 }

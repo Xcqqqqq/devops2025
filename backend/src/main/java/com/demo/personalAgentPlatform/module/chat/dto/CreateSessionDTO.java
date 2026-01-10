@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class CreateSessionDTO {
+    private Long agentId;
     private String title;
-    private String type; // 可选，默认为"chat"
 
 
 }

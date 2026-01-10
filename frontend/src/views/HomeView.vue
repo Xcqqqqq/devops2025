@@ -36,10 +36,10 @@
         <div class="agent-list">
           <!-- 智能体卡片 -->
           <div class="agent-card" v-for="agent in agentList" :key="agent.id">
-            <div class="agent-avatar">
+            <div class="agent-avatar" @click="handleAgentClick(agent.id)">
               <el-icon class="avatar-icon"><Avatar /></el-icon>
             </div>
-            <div class="agent-info">
+            <div class="agent-info" @click="handleAgentClick(agent.id)">
               <h3 class="agent-name">{{ agent.name }}</h3>
               <p class="agent-description">{{ agent.description }}</p>
             </div>
@@ -345,6 +345,11 @@ const handleConfirmDelete = async () => {
     console.error('删除智能体失败:', error)
     ElMessage.error('删除智能体失败')
   }
+}
+
+// 点击智能体头像或名称跳转到聊天页面
+const handleAgentClick = (agentId) => {
+  router.push(`/chat/${agentId}`)
 }
 </script>
 

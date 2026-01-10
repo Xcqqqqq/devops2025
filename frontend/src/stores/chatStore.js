@@ -18,10 +18,10 @@ export const useChatStore = defineStore('chat', {
 
   actions: {
     // 创建新会话
-    async createNewSession(title = '新会话') {
+    async createNewSession(title = '新会话', agentId) {
       try {
         this.isLoading = true
-        const session = await chatApi.createSession({ title })
+        const session = await chatApi.createSession({ title, agentId })
         this.sessionList.unshift(session)
         this.currentSession = session
         this.messageList = []
@@ -37,10 +37,10 @@ export const useChatStore = defineStore('chat', {
     },
 
     // 获取会话列表
-    async loadSessionList() {
+    async loadSessionList(agentId) {
       try {
         this.isLoading = true
-        this.sessionList = await chatApi.getSessionList({ page: 1, size: 100 })
+        this.sessionList = await chatApi.getSessionList({ page: 1, size: 100, agentId })
         // 如果没有当前会话且有会话列表，默认选中第一个
         if (!this.currentSession && this.sessionList.length > 0) {
           this.currentSession = this.sessionList[0]

@@ -65,11 +65,7 @@
     - Long id
     - Long userId
     - String title
-    - String type(会话类型，默认值为"chat"，目前只实现该类型)
-    - Integer status(0 已结束 1 进行中)
-    - Integer messageCount(会话中的消息数量)
-    - LocalDateTime createAt(会话创建时间)
-    - LocalDateTime updateAt(会话更新时间)
+    - List<ChatMessage> messages(会话中的消息列表)
 
 2. ChatMessage:
     - Long id
@@ -78,13 +74,3 @@
     - String content(消息内容)
     - String model(模型名称)
 
-# 数据库储存设计
-1. chat_session（聊天会话表） ：
-   - 存储用户的会话信息
-   - 主要字段：id, user_id, title, type, status, last_message_time, created_at, updated_at, is_deleted
-   - 索引：user_id（加速查询用户会话）
-
-2. chat_message（聊天消息表） ：
-   - 存储会话中的所有消息
-   - 主要字段：id, session_id, role, content, model, created_at
-   - 索引：session_id（加速查询会话消息）

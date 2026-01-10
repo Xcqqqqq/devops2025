@@ -11,7 +11,7 @@ public class ChatMessageVO {
     private String role; // "user"或"assistant"
     private String content;
     private String model;
-    private LocalDateTime createdAt;
+    private LocalDateTime time;
 
 
 }

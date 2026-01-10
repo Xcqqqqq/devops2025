@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Param;
 
 import com.demo.personalAgentPlatform.module.chat.entity.ChatSession;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -27,14 +26,11 @@ public interface ChatSessionMapper {
     // 更新会话信息
     int update(ChatSession chatSession);
 
-    // 逻辑删除会话
-    int deleteById(@Param("id") Long id);
-
     // 更新会话消息数量
     int updateMessageCount(@Param("id") Long id, @Param("messageCount") Integer messageCount);
 
-    // 更新会话最后消息时间
-    int updateLastMessageTime(@Param("id") Long id, @Param("lastMessageTime") LocalDateTime lastMessageTime);
+    // 删除会话
+    int deleteById(@Param("id") Long id);
 
     // 验证会话是否属于指定用户
     int countByIdAndUserId(@Param("id") Long id, @Param("userId") Long userId);

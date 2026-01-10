@@ -11,7 +11,5 @@ public class ChatMessage {
     private String role; // 消息角色，"user"或"assistant"
     private String content; // 消息内容
     private String model; // 模型名称
-    private LocalDateTime createdAt; // 创建时间
-
-
+    private LocalDateTime time; // 创建时间
 }

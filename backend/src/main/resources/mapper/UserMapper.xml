@@ -30,7 +30,7 @@
         INSERT INTO users (
             username, password, nickname, avatar, permission
         ) VALUES (
-            #{username}, #{password}, #{nickname}, #{avatar}, #{permission}
+            #{username}, #{password}, #{nickname}, '/avatars/user.jpg', 0
         )
     </insert>
 

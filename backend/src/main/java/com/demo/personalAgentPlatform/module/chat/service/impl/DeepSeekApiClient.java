@@ -14,7 +14,7 @@ public class DeepSeekApiClient {
     // DeepSeek API 基础地址（通用对话接口）
     private static final String DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
     // DeepSeek API Key
-    private static final String API_KEY = "sk-4fb65d47751743799deb8bca1b0f0eba";
+    private static final String API_KEY = System.getenv("DEEPSEEK_API_KEY");
     // OkHttp客户端（全局单例）
     private final OkHttpClient okHttpClient;
     // Gson解析器

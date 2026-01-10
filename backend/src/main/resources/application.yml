@@ -36,7 +36,6 @@ server:
 logging:
   level:
     root: info
-    com.demo.personalAgentPlatform.module.chat.service: debug
-    com.demo.personalAgentPlatform.module.chat.controller: debug
+    com.demo.personalAgentPlatform: debug
   file:
     name: backend.log

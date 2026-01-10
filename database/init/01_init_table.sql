@@ -1,11 +1,20 @@
+-- 设置字符集
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
+
+-- 创建数据库（指定字符集）
+CREATE DATABASE IF NOT EXISTS personal_agent_db
+DEFAULT CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+USE personal_agent_db;
+
 -- 先删除可能存在的旧表
 DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS `agent`;
 DROP TABLE IF EXISTS `chat_session`;
 DROP TABLE IF EXISTS `chat_message`;
-
-
 
 -- 创建统一的users表
 CREATE TABLE users (

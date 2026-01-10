@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  mysql:
+    container_name: ${PROJECT_NAME:-personal-agent-platform}-mysql
+    image: mysql:8
+    restart: unless-stopped
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-personal_agent_db}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-123456}
+      TZ: ${TZ:-Asia/Shanghai}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ../database/init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+  phpmyadmin:
+    container_name: ${PROJECT_NAME:-health-agent}-phpmyadmin
+    image: phpmyadmin:latest
+    restart: unless-stopped
+    ports:
+      - "${PHPMYADMIN_PORT:-8081}:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+      UPLOAD_LIMIT: 50M
+      TZ: ${TZ:-Asia/Shanghai}
+    networks:
+      - app-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+networks:
+  app-network:
+    driver: bridge
+    name: ${PROJECT_NAME:-personal-agent-platform}-network
+
+volumes:
+  mysql-data:
+    driver: local
+    name: ${PROJECT_NAME:-personal-agent-platform}-mysql-data

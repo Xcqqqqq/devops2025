@@ -13,13 +13,13 @@ spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
   
-  
+
   # 数据库配置
   datasource:
     # ⭐ 默认值为 localhost（本地开发），Docker 中通过环境变量覆盖
     url: ${DATASOURCE_URL:jdbc:mysql://localhost:3306/personal_agent_db?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true}
     username: ${DATASOURCE_USERNAME:root}
-    password: ${DATASOURCE_PASSWORD:123456}
+    password: ${DATASOURCE_PASSWORD:}  # 隐藏敏感配置
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       minimum-idle: 5
@@ -53,7 +53,7 @@ jwt:
 
 # AI API配置
 ai:
-  api-key: ${AI_API_KEY:sk-4fb65d47751743799deb8bca1b0f0eba}
+  api-key: ${AI_API_KEY:} # 隐藏敏感配置
   api-url: ${AI_API_URL:https://api.deepseek.com/v1/chat/completions}
 
 

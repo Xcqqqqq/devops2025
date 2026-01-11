@@ -62,13 +62,15 @@ services:
       # 数据库配置（连接 mysql 服务）
       DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-personal_agent_db}?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
       DATASOURCE_USERNAME: root
-      DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD:-123456}
+      DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       
       # Java 运行参数
       JAVA_OPTS: ${JAVA_OPTS:--Xms512m -Xmx1g}
       
       # 时区
       TZ: ${TZ:-Asia/Shanghai}
+      # 敏感配置
+      AI_API_KEY: ${AI_API_KEY}
     volumes:
       - backend-logs:/app/logs
     networks:

@@ -6,16 +6,8 @@
         <result column="username" property="username" />
         <result column="password" property="password" />
         <result column="nickname" property="nickname" />
-        <result column="email" property="email" />
-        <result column="phone" property="phone" />
         <result column="avatar" property="avatar" />
-        <result column="gender" property="gender" />
-        <result column="birthday" property="birthday" />
-        <result column="status" property="status" />
-        <result column="last_login_time" property="lastLoginTime" />
-        <result column="created_at" property="createdAt" />
-        <result column="updated_at" property="updatedAt" />
-        <result column="is_deleted" property="isDeleted" />
+        <result column="permission" property="permission" />
     </resultMap>
 
     <select id="selectByUsername" resultMap="UserMap">

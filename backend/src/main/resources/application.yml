@@ -1,22 +1,38 @@
+# 服务配置
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+
 spring:
   application:
     name: personalAgentPlatform-api
   main:
     allow-circular-references: true
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  
   
   # 数据库配置
   datasource:
-    url: jdbc:mysql://localhost:3306/demo_db?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
-    username: demo_user
-    password: demo_pass_123
+    # ⭐ 默认值为 localhost（本地开发），Docker 中通过环境变量覆盖
+    url: ${DATASOURCE_URL:jdbc:mysql://localhost:3306/personal_agent_db?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true}
+    username: ${DATASOURCE_USERNAME:root}
+    password: ${DATASOURCE_PASSWORD:123456}
     driver-class-name: com.mysql.cj.jdbc.Driver
-  
-  # Redis配置（暂时不使用）
-  # redis:
-  #   host: localhost
-  #   port: 6379
-  #   password:
-  #   database: 0
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_null
+
 
 # MyBatis配置
 mybatis:
@@ -24,13 +40,29 @@ mybatis:
   type-aliases-package: com.demo.personalAgentPlatform.module.*.entity
   configuration:
     map-underscore-to-camel-case: true
-    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-# 服务配置
-server:
-  port: 8080
-  servlet:
-    context-path: /
+
+# JWT配置
+jwt:
+  secret: ${JWT_SECRET:8e9f2a7d3c1b5e8a9d7b3c8f9e7d2b5a8f9d7c3b8e9f7d2b5a8f9d7c3b8e9f7d2}
+  expiration: ${JWT_EXPIRATION:86400000}  # 24小时
+  header: Authorization
+  prefix: Bearer
+
+
+# AI API配置
+ai:
+  api-key: ${AI_API_KEY:sk-4fb65d47751743799deb8bca1b0f0eba}
+  api-url: ${AI_API_URL:https://api.deepseek.com/v1/chat/completions}
+
+
+# Knife4j配置
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
 
 # 日志配置
 logging:

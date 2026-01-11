@@ -26,6 +26,9 @@ import org.slf4j.LoggerFactory;
 
 @Service
 public class ChatMessageServiceImpl implements ChatMessageService {
+    @Autowired
+    private DeepSeekApiClient client;
+
     // 日志对象
     private static final Logger logger = LoggerFactory.getLogger(ChatMessageServiceImpl.class);
 
@@ -123,9 +126,6 @@ public class ChatMessageServiceImpl implements ChatMessageService {
      */
     private String callModelAPI(String userMessage, String agentPrompt) {
         try {
-            // 创建DeepSeekApiClient实例
-            DeepSeekApiClient client = new DeepSeekApiClient();
-
             // 调用DeepSeek API获取AI回复，传递系统提示词
             String aiResponse = client.chatWithSystemPrompt(agentPrompt, userMessage, "deepseek-chat");
 

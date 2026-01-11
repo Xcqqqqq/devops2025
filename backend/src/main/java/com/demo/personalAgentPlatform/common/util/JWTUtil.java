@@ -4,8 +4,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,11 +16,25 @@ import java.util.Map;
 
 @Component
 public class JWTUtil {
-    // 使用Keys.secretKeyFor方法生成安全的密钥
-    private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    // 过期时间（7天）
-    private static final long EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000;
+    // 先声明密钥变量，不立即初始化
+    @Value("${jwt.secret}")
+    private String jwtSecret;
     
+    private Key SECRET_KEY;
+    // 过期时间（1天）
+    private static final long EXPIRE_TIME = 24 * 60 * 60 * 1000;
+    
+    // 延迟初始化密钥: Spring注入完jwtSecret后执行
+    @PostConstruct
+    public void initSecretKey(){
+        try {
+            // 此时jwtSecret已经被@Value注入，非null
+            SECRET_KEY = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            throw new RuntimeException("JWT密钥初始化失败：" + e.getMessage(), e);
+        }
+    }
+
     // 生成JWT令牌
     public String generateToken(Long userId, String username) {
         Map<String, Object> claims = new HashMap<>();

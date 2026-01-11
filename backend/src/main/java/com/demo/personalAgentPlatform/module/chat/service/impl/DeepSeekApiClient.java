@@ -1,20 +1,29 @@
 package com.demo.personalAgentPlatform.module.chat.service.impl;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import okhttp3.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * DeepSeek API 调用客户端
  */
+@Component
 public class DeepSeekApiClient {
+
     // DeepSeek API 基础地址（通用对话接口）
-    private static final String DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
+    @Value("${ai.api-url}")
+    private String DEEPSEEK_API_URL;
     // DeepSeek API Key
-    private static final String API_KEY = System.getenv("DEEPSEEK_API_KEY");
+    @Value("${ai.api-key}")
+    private String API_KEY;
     // OkHttp客户端（全局单例）
     private final OkHttpClient okHttpClient;
     // Gson解析器
@@ -27,7 +36,9 @@ public class DeepSeekApiClient {
                 .readTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .build();
-        this.gson = new Gson();
+        this.gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .create();
     }
 
     /**

@@ -112,7 +112,7 @@
       />
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="renameDialogVisible = false">取消</el-button>
+          <el-button @click="closeRenameDialog">取消</el-button>
           <el-button type="primary" @click="confirmRenameSession">确定</el-button>
         </span>
       </template>
@@ -187,6 +187,7 @@ const handleBackToHome = () => {
 const handleNewSession = () => {
   newSessionName.value = '新会话'
   newSessionDialogVisible.value = true
+}
 
 // 确认创建会话
 const confirmCreateSession = async () => {
@@ -279,6 +280,11 @@ const confirmRenameSession = async () => {
     console.error('重命名会话失败:', error)
     ElMessage.error('更新标题失败')
   }
+}
+
+// 关闭弹窗的方法
+const closeRenameDialog = () => {
+  renameDialogVisible.value = false
 }
 
 // 获取当前agent信息

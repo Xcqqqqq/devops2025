@@ -1,5 +1,4 @@
-version: "3.8"
-
+#version: "3.8"
 services:
   # 数据库
   mysql:
@@ -77,6 +76,26 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+
+  # 前端服务
+  frontend:
+    container_name: ${PROJECT_NAME:-personal-agent-platform}-frontend
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+      args:
+        NODE_ENV: ${NODE_ENV:-production}
+    image: ${PROJECT_NAME:-personal-agent-platform}-frontend:latest
+    restart: unless-stopped
+    ports:
+      - "${WEB_ADMIN_PORT:-80}:80"
+    environment:
+      TZ: ${TZ:-Asia/Shanghai}
+    networks:
+      - app-network
+    depends_on:
+      - backend  # ⭐ 等待后端服务启动（不要求健康检查）
+
 
 networks:
   app-network:
